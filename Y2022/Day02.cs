@@ -2,50 +2,84 @@
 
 public class Day02 : Day
 {
-  private const int DrawScore = 3;
-  private const int WinScore = 6;
-
-  private enum Options
+  private readonly Dictionary<(Option opponent, Outcome desired), Option> _moveForOutcome = new()
   {
-    Rock = 1,
-    Paper = 2,
-    Scissors = 3
-  }
+    { (Option.Rock, Outcome.Win), Option.Paper },
+    { (Option.Rock, Outcome.Loss), Option.Scissors },
+    { (Option.Rock, Outcome.Draw), Option.Rock },
+    { (Option.Paper, Outcome.Win), Option.Scissors },
+    { (Option.Paper, Outcome.Loss), Option.Rock },
+    { (Option.Paper, Outcome.Draw), Option.Paper },
+    { (Option.Scissors, Outcome.Win), Option.Rock },
+    { (Option.Scissors, Outcome.Loss), Option.Paper },
+    { (Option.Scissors, Outcome.Draw), Option.Scissors }
+  };
 
-  private readonly Dictionary<char, Options> _optionsMap = new()
+  private readonly Dictionary<char, Option> _optionMap = new()
   {
-    { 'A', Options.Rock },
-    { 'B', Options.Paper },
-    { 'C', Options.Scissors },
-    { 'X', Options.Rock },
-    { 'Y', Options.Paper },
-    { 'Z', Options.Scissors }
+    { 'A', Option.Rock },
+    { 'B', Option.Paper },
+    { 'C', Option.Scissors },
+    { 'X', Option.Rock },
+    { 'Y', Option.Paper },
+    { 'Z', Option.Scissors }
+  };
+
+  private readonly Dictionary<char, Outcome> _outcomeMap = new()
+  {
+    { 'X', Outcome.Loss }, { 'Y', Outcome.Draw }, { 'Z', Outcome.Win }
+  };
+
+  private readonly Dictionary<(Option opponent, Option my), Outcome> _winningMoves = new()
+  {
+    { (Option.Rock, Option.Paper), Outcome.Win },
+    { (Option.Rock, Option.Scissors), Outcome.Loss },
+    { (Option.Paper, Option.Rock), Outcome.Loss },
+    { (Option.Paper, Option.Scissors), Outcome.Win },
+    { (Option.Scissors, Option.Rock), Outcome.Win },
+    { (Option.Scissors, Option.Paper), Outcome.Loss }
   };
 
   public override (int part1, int? part2) Solve(string[] input)
   {
-    var totalScore = 0;
+    (int part1, int part2) totalScore = (0, 0);
     foreach (var s in input)
     {
-      var opponentPick = _optionsMap[s[0]];
-      var myPick = _optionsMap[s[2]];
+      var opponentPick = _optionMap[s[0]];
+      var myPick = _optionMap[s[2]];
+      var desiredOutcome = _outcomeMap[s[2]];
 
-      totalScore += (int)myPick;
-      
-      if (opponentPick == myPick)
-      {
-        totalScore += DrawScore;
-        continue;
-      }
+      var outcome = DetermineOutcome(opponentPick, myPick);
+      totalScore.part1 += CalculateScore(myPick, outcome);
 
-      if ((myPick == Options.Rock && opponentPick == Options.Scissors) ||
-          (myPick == Options.Paper && opponentPick == Options.Rock) ||
-          (myPick == Options.Scissors && opponentPick == Options.Paper))
-      {
-        totalScore += WinScore;
-      }
+      var moveToMake = _moveForOutcome[(opponentPick, desiredOutcome)];
+      totalScore.part2 += CalculateScore(moveToMake, desiredOutcome);
     }
 
-    return (totalScore, null);
+    return totalScore;
+  }
+
+  private static int CalculateScore(Option myMove, Outcome outcome)
+  {
+    return (int)myMove + (int)outcome;
+  }
+
+  private Outcome DetermineOutcome(Option opponent, Option my)
+  {
+    return opponent == my ? Outcome.Draw : _winningMoves[(opponent, my)];
+  }
+
+  private enum Outcome
+  {
+    Loss = 0,
+    Draw = 3,
+    Win = 6
+  }
+
+  private enum Option
+  {
+    Rock = 1,
+    Paper = 2,
+    Scissors = 3
   }
 }

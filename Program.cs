@@ -7,7 +7,7 @@ if (args.Length != 2)
   return;
 }
 
-if (!int.TryParse(args[0], out int year) || !int.TryParse(args[1], out int day))
+if (!int.TryParse(args[0], out var year) || !int.TryParse(args[1], out var day))
 {
   Console.WriteLine("Year and day must be numbers");
   return;
@@ -17,7 +17,7 @@ try
 {
   var runner = new DayRunner();
   var result = await runner.RunDayAsync(year, day);
-                
+
   Console.WriteLine($"Part 1: {result.part1}");
   if (result.part2.HasValue)
   {
