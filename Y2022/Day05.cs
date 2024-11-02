@@ -9,21 +9,30 @@ public class Day05 : Day
       .Select(ParseMoveCommand)
       .ToList();
 
-    var stacks = ParseStacks(configurationLines);
+    var stacks1 = ParseStacks(configurationLines);
+    var stacks2 = ParseStacks(configurationLines);
 
     foreach (var (count, source, dest) in moveLines)
     {
       for (var i = 0; i < count; i++)
       {
-        var crate = stacks[source][^1];
-        stacks[source].RemoveAt(stacks[source].Count - 1);
-        stacks[dest].Add(crate);
+        var crate = stacks1[source][^1];
+        stacks1[source].RemoveAt(stacks1[source].Count - 1);
+        stacks1[dest].Add(crate);
       }
     }
 
-    var result = string.Concat(stacks.Select(s => s.Value.Last()));
+    foreach (var (count, source, dest) in moveLines)
+    {
+      var cratesToMove = stacks2[source].TakeLast(count).ToList();
+      stacks2[source].RemoveRange(stacks2[source].Count - count, count);
+      stacks2[dest].AddRange(cratesToMove);
+    }
 
-    return (result, "");
+    var result1 = string.Concat(stacks1.Select(s => s.Value.Last()));
+    var result2 = string.Concat(stacks2.Select(s => s.Value.Last()));
+
+    return (result1, result2);
   }
 
   private static Dictionary<int, List<char>> ParseStacks(List<string> configurationLines)
