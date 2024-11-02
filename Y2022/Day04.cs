@@ -4,18 +4,24 @@ public class Day04 : Day
 {
   public override (int part1, int? part2) Solve(string[] input, string _)
   {
-    var overlaps = 0;
+    var fullOverlaps = 0;
+    var partialOverlaps = 0;
 
     foreach (var s in input)
     {
       var (first, second) = ParseLine(s);
       if (first.FullyContains(second) || second.FullyContains(first))
       {
-        overlaps++;
+        fullOverlaps++;
+      }
+
+      if (first.PartiallyContains(second) || second.PartiallyContains(first))
+      {
+        partialOverlaps++;
       }
     }
 
-    return (overlaps, null);
+    return (fullOverlaps, partialOverlaps);
   }
 
   private static (Assignment first, Assignment second) ParseLine(string line)
@@ -44,6 +50,11 @@ public class Day04 : Day
     public bool FullyContains(Assignment other)
     {
       return Min <= other.Min && Max >= other.Max;
+    }
+
+    public bool PartiallyContains(Assignment other)
+    {
+      return Min <= other.Max && Max >= other.Min;
     }
   }
 }
