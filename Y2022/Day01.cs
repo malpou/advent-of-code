@@ -20,6 +20,6 @@ public class Day01 : Day
     }
 
     weightTotals.Sort((a, b) => b.CompareTo(a));
-    return (weightTotals[0], null);
+    return (weightTotals[0], weightTotals.Take(3).Sum());
   }
 }
