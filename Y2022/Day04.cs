@@ -2,7 +2,7 @@
 
 public class Day04 : Day
 {
-  public override (int part1, int? part2) Solve(string[] input, string _)
+  public override (string part1, string part2) Solve(string[] input, string _)
   {
     var fullOverlaps = 0;
     var partialOverlaps = 0;
@@ -21,7 +21,7 @@ public class Day04 : Day
       }
     }
 
-    return (fullOverlaps, partialOverlaps);
+    return (fullOverlaps.ToString(), partialOverlaps.ToString());
   }
 
   private static (Assignment first, Assignment second) ParseLine(string line)

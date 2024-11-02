@@ -2,7 +2,7 @@
 
 public class Day03 : Day
 {
-  public override (int part1, int? part2) Solve(string[] input, string _)
+  public override (string part1, string part2) Solve(string[] input, string _)
   {
     var part1 = input.Select(s => s[..(s.Length / 2)]
         .Intersect(s[(s.Length / 2)..])
@@ -17,7 +17,7 @@ public class Day03 : Day
         .Sum(GetPriority))
       .Sum();
 
-    return (part1, part2);
+    return (part1.ToString(), part2.ToString());
   }
 
   private static int GetPriority(char c)

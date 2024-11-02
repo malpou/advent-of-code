@@ -40,9 +40,10 @@ public class Day02 : Day
     { (Option.Scissors, Option.Paper), Outcome.Loss }
   };
 
-  public override (int part1, int? part2) Solve(string[] input, string _)
+  public override (string part1, string part2) Solve(string[] input, string _)
   {
-    (int part1, int part2) totalScore = (0, 0);
+    var part1 = 0;
+    var part2 = 0;
     foreach (var s in input)
     {
       var opponentPick = _optionMap[s[0]];
@@ -50,13 +51,13 @@ public class Day02 : Day
       var desiredOutcome = _outcomeMap[s[2]];
 
       var outcome = DetermineOutcome(opponentPick, myPick);
-      totalScore.part1 += CalculateScore(myPick, outcome);
+      part1 += CalculateScore(myPick, outcome);
 
       var moveToMake = _moveForOutcome[(opponentPick, desiredOutcome)];
-      totalScore.part2 += CalculateScore(moveToMake, desiredOutcome);
+      part2 += CalculateScore(moveToMake, desiredOutcome);
     }
 
-    return totalScore;
+    return (part1.ToString(), part2.ToString());
   }
 
   private static int CalculateScore(Option myMove, Outcome outcome)

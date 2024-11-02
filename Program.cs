@@ -19,7 +19,7 @@ try
   var result = await runner.RunDayAsync(year, day);
 
   Console.WriteLine($"Part 1: {result.part1}");
-  if (result.part2.HasValue)
+  if (!string.IsNullOrEmpty(result.part2))
   {
     Console.WriteLine($"Part 2: {result.part2}");
   }

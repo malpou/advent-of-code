@@ -2,7 +2,7 @@
 
 public class Day01 : Day
 {
-  public override (int part1, int? part2) Solve(string[] input, string _)
+  public override (string part1, string part2) Solve(string[] input, string _)
   {
     var weightTotals = new List<int>();
     var currentWeight = 0;
@@ -20,6 +20,6 @@ public class Day01 : Day
     }
 
     weightTotals.Sort((a, b) => b.CompareTo(a));
-    return (weightTotals[0], weightTotals.Take(3).Sum());
+    return (weightTotals[0].ToString(), weightTotals.Take(3).Sum().ToString());
   }
 }

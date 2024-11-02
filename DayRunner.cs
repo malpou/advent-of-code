@@ -2,17 +2,17 @@
 
 public interface IDay
 {
-  (int part1, int? part2) Solve(string[] input, string inputText);
+  (string part1, string part2) Solve(string[] input, string inputText);
 }
 
 public abstract class Day : IDay
 {
-  public abstract (int part1, int? part2) Solve(string[] input, string inputText);
+  public abstract (string part1, string part2) Solve(string[] input, string inputText);
 }
 
 public class DayRunner(string inputsBasePath = "inputs")
 {
-  public async Task<(int part1, int? part2)> RunDayAsync(int year, int day)
+  public async Task<(string part1, string? part2)> RunDayAsync(int year, int day)
   {
     var dayString = day.ToString("00");
     var className = $"AdventOfCode.Y{year}.Day{dayString}";
