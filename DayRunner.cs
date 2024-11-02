@@ -25,7 +25,7 @@ public class DayRunner(string inputsBasePath = "inputs")
 
     var inputLines = await File.ReadAllLinesAsync(inputPath);
     var inputText = await File.ReadAllTextAsync(inputPath);
-    
+
     var type = Type.GetType(className);
     if (type == null)
     {
