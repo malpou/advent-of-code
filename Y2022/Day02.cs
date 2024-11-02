@@ -40,7 +40,7 @@ public class Day02 : Day
     { (Option.Scissors, Option.Paper), Outcome.Loss }
   };
 
-  public override (int part1, int? part2) Solve(string[] input)
+  public override (int part1, int? part2) Solve(string[] input, string _)
   {
     (int part1, int part2) totalScore = (0, 0);
     foreach (var s in input)

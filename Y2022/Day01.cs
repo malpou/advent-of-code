@@ -2,7 +2,7 @@
 
 public class Day01 : Day
 {
-  public override (int part1, int? part2) Solve(string[] input)
+  public override (int part1, int? part2) Solve(string[] input, string _)
   {
     var weightTotals = new List<int>();
     var currentWeight = 0;

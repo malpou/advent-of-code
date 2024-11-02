@@ -2,12 +2,12 @@
 
 public interface IDay
 {
-  (int part1, int? part2) Solve(string[] input);
+  (int part1, int? part2) Solve(string[] input, string inputText);
 }
 
 public abstract class Day : IDay
 {
-  public abstract (int part1, int? part2) Solve(string[] input);
+  public abstract (int part1, int? part2) Solve(string[] input, string inputText);
 }
 
 public class DayRunner(string inputsBasePath = "inputs")
@@ -23,8 +23,9 @@ public class DayRunner(string inputsBasePath = "inputs")
       throw new FileNotFoundException($"Input file not found: {inputPath}");
     }
 
-    var input = await File.ReadAllLinesAsync(inputPath);
-
+    var inputLines = await File.ReadAllLinesAsync(inputPath);
+    var inputText = await File.ReadAllTextAsync(inputPath);
+    
     var type = Type.GetType(className);
     if (type == null)
     {
@@ -38,6 +39,6 @@ public class DayRunner(string inputsBasePath = "inputs")
         $"Could not create instance of {className} or it doesn't implement IDay.");
     }
 
-    return instance.Solve(input);
+    return instance.Solve(inputLines, inputText);
   }
 }
