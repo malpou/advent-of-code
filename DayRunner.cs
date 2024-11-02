@@ -32,8 +32,7 @@ public class DayRunner(string inputsBasePath = "inputs")
         $"Solution class {className} not found. Ensure it exists and inherits from Day.");
     }
 
-    var instance = Activator.CreateInstance(type) as IDay;
-    if (instance == null)
+    if (Activator.CreateInstance(type) is not IDay instance)
     {
       throw new InvalidOperationException(
         $"Could not create instance of {className} or it doesn't implement IDay.");
