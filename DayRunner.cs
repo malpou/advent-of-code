@@ -2,12 +2,12 @@
 
 public interface IDay
 {
-  (string part1, string part2) Solve(string[] input, string inputText);
+  (string part1, string part2) Solve(string[] inputLines, string inputText);
 }
 
 public abstract class Day : IDay
 {
-  public abstract (string part1, string part2) Solve(string[] input, string inputText);
+  public abstract (string part1, string part2) Solve(string[] inputLines, string inputText);
 }
 
 public class DayRunner(string inputsBasePath = "inputs")
