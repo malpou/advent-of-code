@@ -2,22 +2,27 @@ namespace AdventOfCode.Y2022;
 
 internal class Day06 : Day
 {
-  private const int MarkerLength = 4;
+  private readonly int[] _markerLengths = [4, 14];
 
   public override (string part1, string part2) Solve(string[] _, string input)
   {
-    var result = -1;
-    for (var i = 0; i < input.Length; i++)
-    {
-      if (input.Substring(i, MarkerLength).ToHashSet().Count != MarkerLength)
-      {
-        continue;
-      }
+    var results = _markerLengths
+      .Select(length => FindMarkerPosition(input, length))
+      .ToArray();
 
-      result = i + MarkerLength;
-      break;
+    return (results[0].ToString(), results[1].ToString());
+  }
+
+  private static int FindMarkerPosition(string input, int markerLength)
+  {
+    for (var i = 0; i <= input.Length - markerLength; i++)
+    {
+      if (input.Substring(i, markerLength).ToHashSet().Count == markerLength)
+      {
+        return i + markerLength;
+      }
     }
 
-    return (result.ToString(), "");
+    return -1;
   }
 }
