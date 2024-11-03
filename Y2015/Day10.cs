@@ -4,16 +4,22 @@ namespace AdventOfCode.Y2015;
 
 public class Day10 : Day
 {
-  private const int Processes = 40;
+  private const int Processes = 50;
 
   public override (string part1, string part2) Solve(string[] _, string input)
   {
+    var part1 = -1;
     for (var i = 0; i < Processes; i++)
     {
+      if (i == 40)
+      {
+        part1 = input.Length;
+      }
+
       input = ProcessInput(input);
     }
 
-    return (input.Length.ToString(), "");
+    return (part1.ToString(), input.Length.ToString());
   }
 
   private static string ProcessInput(string input)
