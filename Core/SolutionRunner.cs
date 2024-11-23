@@ -64,7 +64,7 @@ public class SolutionRunner(AdventOfCodeClient client, string inputsBasePath = "
         {
             var template = $$"""
                              using AdventOfCode.Core;
-                             
+
                              namespace AdventOfCode.Y{{year}};
 
                              public class Day{{dayString}}: Day
