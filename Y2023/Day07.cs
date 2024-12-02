@@ -46,9 +46,8 @@ public class Day07 : Day
         return sum;
     }
 
-    private static int[] GetHandScore(string cards, bool useJokers)
-    {
-        return cards.Select(card => card switch
+    private static int[] GetHandScore(string cards, bool useJokers) =>
+        cards.Select(card => card switch
         {
             'J' => useJokers ? 1 : 10,
             '2' => 2,
@@ -65,7 +64,6 @@ public class Day07 : Day
             'A' => 13,
             _ => throw new ArgumentOutOfRangeException(nameof(card), card, null)
         }).ToArray();
-    }
 
     private static int GetHandTypeWithJokers(string cards)
     {

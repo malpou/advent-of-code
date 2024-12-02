@@ -62,15 +62,10 @@ public class Day02 : Day
         return (part1.ToString(), part2.ToString());
     }
 
-    private static int CalculateScore(Option myMove, Outcome outcome)
-    {
-        return (int)myMove + (int)outcome;
-    }
+    private static int CalculateScore(Option myMove, Outcome outcome) => (int)myMove + (int)outcome;
 
-    private Outcome DetermineOutcome(Option opponent, Option my)
-    {
-        return opponent == my ? Outcome.Draw : _winningMoves[(opponent, my)];
-    }
+    private Outcome DetermineOutcome(Option opponent, Option my) =>
+        opponent == my ? Outcome.Draw : _winningMoves[(opponent, my)];
 
     private enum Outcome
     {

@@ -22,8 +22,5 @@ public class Day03 : Day
         return (part1.ToString(), part2.ToString());
     }
 
-    private static int GetPriority(char c)
-    {
-        return c - (char.IsLower(c) ? 96 : 38);
-    }
+    private static int GetPriority(char c) => c - (char.IsLower(c) ? 96 : 38);
 }

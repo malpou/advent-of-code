@@ -21,14 +21,12 @@ public class Day02 : Day
 
         var isConsistent = differences.All(d => d > 0) || differences.All(d => d < 0);
         var isValidDifferences = differences.All(d => d is >= 1 and <= 3 or >= -3 and <= -1);
-        
+
         return isConsistent && isValidDifferences;
     }
 
-    private static bool IsSafeWithDampener(List<int> report)
-    {
-        return Enumerable.Range(0, report.Count)
+    private static bool IsSafeWithDampener(List<int> report) =>
+        Enumerable.Range(0, report.Count)
             .Select(i => report.Where((_, index) => index != i).ToList())
             .Any(IsSafe);
-    }
 }

@@ -47,9 +47,8 @@ public class Day01 : Day
         }
     }
 
-    private static Direction Turn(Direction current, char turn)
-    {
-        return (turn, current) switch
+    private static Direction Turn(Direction current, char turn) =>
+        (turn, current) switch
         {
             ('R', Direction.North) => Direction.East,
             ('R', Direction.East) => Direction.South,
@@ -61,7 +60,6 @@ public class Day01 : Day
             ('L', Direction.East) => Direction.North,
             _ => throw new InvalidOperationException($"Invalid turn {turn} from direction {current}")
         };
-    }
 
     private enum Direction { North, East, South, West }
 
@@ -69,9 +67,8 @@ public class Day01 : Day
     {
         public int ManhattanDistance => Math.Abs(X) + Math.Abs(Y);
 
-        public Position Move(Direction direction)
-        {
-            return direction switch
+        public Position Move(Direction direction) =>
+            direction switch
             {
                 Direction.North => this with { Y = Y + 1 },
                 Direction.South => this with { Y = Y - 1 },
@@ -79,6 +76,5 @@ public class Day01 : Day
                 Direction.West => this with { X = X - 1 },
                 _ => throw new ArgumentOutOfRangeException(nameof(direction))
             };
-        }
     }
 }

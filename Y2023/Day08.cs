@@ -53,10 +53,7 @@ public class Day08 : Day
         return buffer.TotalMoves;
     }
 
-    private static long LeastCommonMultiple(long a, long b)
-    {
-        return Math.Abs(a * b) / GreatestCommonDivisor(a, b);
-    }
+    private static long LeastCommonMultiple(long a, long b) => Math.Abs(a * b) / GreatestCommonDivisor(a, b);
 
     private static long GreatestCommonDivisor(long a, long b)
     {

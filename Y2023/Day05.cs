@@ -15,13 +15,11 @@ public class Day05 : Day
         return (part1.ToString(), part2.ToString());
     }
 
-    private static List<long> ParseSeeds(string line)
-    {
-        return line.Split(':')[1].Trim()
+    private static List<long> ParseSeeds(string line) =>
+        line.Split(':')[1].Trim()
             .Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(long.Parse)
             .ToList();
-    }
 
     private static List<List<MapRange>> ParseMaps(string[] input)
     {

@@ -49,14 +49,8 @@ public class Day04 : Day
         private int Min { get; } = min;
         private int Max { get; } = max;
 
-        public bool FullyContains(Assignment other)
-        {
-            return Min <= other.Min && Max >= other.Max;
-        }
+        public bool FullyContains(Assignment other) => Min <= other.Min && Max >= other.Max;
 
-        public bool PartiallyContains(Assignment other)
-        {
-            return Min <= other.Max && Max >= other.Min;
-        }
+        public bool PartiallyContains(Assignment other) => Min <= other.Max && Max >= other.Min;
     }
 }
