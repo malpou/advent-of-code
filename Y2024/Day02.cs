@@ -6,52 +6,27 @@ public class Day02 : Day
 {
     public override (string part1, string part2) Solve(string[] input, string _)
     {
-        var reports = input.Select(l => l.Split(" ").Select(int.Parse).ToList());
+        var reports = input.Select(l => l.Split(" ").Select(int.Parse).ToList()).ToList();
 
-        var safeReports = 0;
-        var safeReportsWithDampener = 0;
-        foreach (var report in reports)
-        {
-            var differences = GetDifferences(report);
+        var safeReports = reports.Count(IsSafe);
+        var safeReportsWithDampener = reports.Count(IsSafeWithDampener);
 
-            if (IsConsistent(differences) && differences.All(IsValidDifference))
-            {
-                safeReports++;
-            }
-            else if (IsSafeWithDampener(report))
-            {
-                safeReportsWithDampener++;
-            }
-        }
-
-        return (safeReports.ToString(), (safeReports + safeReportsWithDampener).ToString());
+        return (safeReports.ToString(), safeReportsWithDampener.ToString());
     }
 
-    private static List<int> GetDifferences(List<int> numbers)
+    private static bool IsSafe(List<int> report)
     {
-        var differences = new List<int>();
-        for (var i = 0; i < numbers.Count - 1; i++)
-        {
-            differences.Add(numbers[i] - numbers[i + 1]);
-        }
+        var pairs = report.Zip(report.Skip(1));
+        var differences = pairs.Select(p => p.First - p.Second).ToList();
 
-        return differences;
-    }
-
-    private static bool IsValidDifference(int d)
-    {
-        return d is >= 1 and <= 3 or >= -3 and <= -1;
-    }
-
-    private static bool IsConsistent(List<int> differences)
-    {
-        return differences.All(d => d > 0) || differences.All(d => d < 0);
+        return (differences.All(d => d > 0) || differences.All(d => d < 0))
+               && differences.All(d => d is >= 1 and <= 3 or >= -3 and <= -1);
     }
 
     private static bool IsSafeWithDampener(List<int> report)
     {
-        return report.Select((_, i) => report.Where((_, index) => index != i).ToList())
-            .Select(GetDifferences)
-            .Any(differences => IsConsistent(differences) && differences.All(IsValidDifference));
+        return Enumerable.Range(0, report.Count)
+            .Select(i => report.Where((_, index) => index != i).ToList())
+            .Any(IsSafe);
     }
 }
