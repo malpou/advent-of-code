@@ -6,32 +6,31 @@ public class Day02 : Day
 {
     public override (string part1, string part2) Solve(string[] input, string _)
     {
-        var reports = input.Select(l => l.Split(" ").Select(int.Parse).ToArray()).ToArray();
+        var reports = input.Select(l => l.Split(" ").Select(int.Parse).ToList());
 
-        var safeReports1 = 0;
-        var safeReports2 = 0;
+        var safeReports = 0;
+        var safeReportsWithDampener = 0;
         foreach (var report in reports)
         {
             var differences = GetDifferences(report);
 
             if (IsConsistent(differences) && differences.All(IsValidDifference))
             {
-                safeReports1++;
-                safeReports2++;
+                safeReports++;
             }
             else if (IsSafeWithDampener(report))
             {
-                safeReports2++;
+                safeReportsWithDampener++;
             }
         }
 
-        return (safeReports1.ToString(), safeReports2.ToString());
+        return (safeReports.ToString(), (safeReports + safeReportsWithDampener).ToString());
     }
 
-    private static List<int> GetDifferences(int[] numbers)
+    private static List<int> GetDifferences(List<int> numbers)
     {
         var differences = new List<int>();
-        for (var i = 0; i < numbers.Length - 1; i++)
+        for (var i = 0; i < numbers.Count - 1; i++)
         {
             differences.Add(numbers[i] - numbers[i + 1]);
         }
@@ -49,9 +48,9 @@ public class Day02 : Day
         return differences.All(d => d > 0) || differences.All(d => d < 0);
     }
 
-    private static bool IsSafeWithDampener(int[] report)
+    private static bool IsSafeWithDampener(List<int> report)
     {
-        return report.Select((_, i) => report.Where((_, index) => index != i).ToArray())
+        return report.Select((_, i) => report.Where((_, index) => index != i).ToList())
             .Select(GetDifferences)
             .Any(differences => IsConsistent(differences) && differences.All(IsValidDifference));
     }
