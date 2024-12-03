@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace AdventOfCode.Core;
 
 public abstract class Day
@@ -34,7 +36,12 @@ public class SolutionRunner(AdventOfCodeClient client, string inputsBasePath = "
                 $"Could not create instance of {className} or it doesn't inherit from Day.");
         }
 
-        return instance.Solve(inputLines, inputText);
+        var sw = new Stopwatch();
+        sw.Start();
+        var solution = instance.Solve(inputLines, inputText);
+        sw.Stop();
+        Console.WriteLine($"Solution Time: {sw.ElapsedMilliseconds}ms");
+        return solution;
     }
 
     private async Task EnsureInputFileExistsAsync(int year, int day)
