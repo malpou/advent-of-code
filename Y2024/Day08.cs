@@ -1,4 +1,5 @@
 using AdventOfCode.Core;
+using AdventOfCode.Utils;
 
 namespace AdventOfCode.Y2024;
 
@@ -39,37 +40,18 @@ public class Day08 : Day
     private static IEnumerable<Point> GetVectorPoints(Point antenna1, Point antenna2, int rows, int cols,
         bool allPoints)
     {
-        var positiveVector = (
-            Row: antenna2.Row - antenna1.Row,
-            Col: antenna2.Col - antenna1.Col
-        );
-
-        return GetPoints(antenna1, (
-            -positiveVector.Row,
-            -positiveVector.Col
-        )).Concat(GetPoints(antenna2, positiveVector));
+        var vector = antenna1.GetVector(antenna2);
+        return GetPoints(antenna1, (-vector.Row, -vector.Col)).Concat(GetPoints(antenna2, vector));
 
         IEnumerable<Point> GetPoints(Point antenna, (int Row, int Col) v)
         {
-            var point = new Point(antenna.Row + v.Row, antenna.Col + v.Col);
-            while (IsInBounds(point, rows, cols))
+            var point = antenna.AddVector(v);
+            while (point.IsInBounds(rows, cols))
             {
                 yield return point;
-                if (!allPoints)
-                {
-                    yield break;
-                }
-
-                point = new Point(point.Row + v.Row, point.Col + v.Col);
+                if (!allPoints) yield break;
+                point = point.AddVector(v);
             }
         }
-    }
-
-    private static bool IsInBounds(Point p, int rows, int cols) =>
-        p.Row >= 0 && p.Row < rows && p.Col >= 0 && p.Col < cols;
-
-    private record Point(int Row, int Col)
-    {
-        public override int GetHashCode() => HashCode.Combine(Row, Col);
     }
 }

@@ -1,4 +1,5 @@
 using AdventOfCode.Core;
+using AdventOfCode.Utils;
 
 namespace AdventOfCode.Y2024;
 
@@ -42,14 +43,6 @@ public class Day06 : Day
         return (guard.VisitedPositions.Count.ToString(), successfullyBlockedLocations.ToString());
     }
 
-    private record Point(int Row, int Col)
-    {
-        public override int GetHashCode() => HashCode.Combine(Row, Col);
-
-        public Point Add(Point other) => new(Row + other.Row, Col + other.Col);
-
-        public Point TurnRight() => new(Col, -Row);
-    }
 
     private class Guard(Point startPos, Point startDir, HashSet<Point> walls, int rows, int cols)
     {
@@ -57,14 +50,11 @@ public class Day06 : Day
         public Point Direction { get; private set; } = startDir;
         public HashSet<Point> VisitedPositions { get; } = [startPos];
 
-        private bool IsInBounds(Point p) =>
-            p.Row >= 0 && p.Row < rows && p.Col >= 0 && p.Col < cols;
-
         public bool Step()
         {
             var nextPosition = Position.Add(Direction);
 
-            if (!IsInBounds(nextPosition) || walls.Contains(nextPosition))
+            if (!nextPosition.IsInBounds(rows, cols) || walls.Contains(nextPosition))
             {
                 Direction = Direction.TurnRight();
                 return true;
@@ -72,7 +62,7 @@ public class Day06 : Day
 
             Position = nextPosition;
             VisitedPositions.Add(Position);
-            return IsInBounds(Position.Add(Direction));
+            return Position.Add(Direction).IsInBounds(rows, cols);
         }
     }
 }
