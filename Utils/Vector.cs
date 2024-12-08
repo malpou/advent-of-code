@@ -28,12 +28,9 @@ public record Vector(int X, int Y)
 
     public Vector OppositeDirection() => new(-X, -Y);
 
-    // In grid coordinates:
-    // Clockwise rotation: (x,y) -> (y,-x)
-    public Vector TurnClockwise() => new(Y, -X);
+    public Vector TurnClockwise() => new(-Y, X);
     
-    // Counterclockwise rotation: (x,y) -> (-y,x)
-    public Vector TurnCounterClockwise() => new(-Y, X);
+    public Vector TurnCounterClockwise() => new(Y, -X);
 
     public override int GetHashCode() => HashCode.Combine(X, Y);
 }
