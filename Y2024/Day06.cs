@@ -17,7 +17,7 @@ public class Day06 : Day
         var start = (from row in Enumerable.Range(0, rows)
             from col in Enumerable.Range(0, cols)
             where input[row][col] == '^'
-            select new Point(X: col, Y: row, cols, rows)).Single();
+            select new Point(col, row, cols, rows)).Single();
 
         var guard = new Guard(start, Vector.Up, walls);
         while (guard.Step()) { }
@@ -50,7 +50,7 @@ public class Day06 : Day
 
         public bool Step()
         {
-            var nextPosition = Position.AddVector(Direction);
+            var nextPosition = Position + Direction;
 
             if (!nextPosition.IsInBounds() || walls.Contains(nextPosition))
             {
@@ -60,7 +60,7 @@ public class Day06 : Day
 
             Position = nextPosition;
             VisitedPositions.Add(Position);
-            return Position.AddVector(Direction).IsInBounds();
+            return (Position + Direction).IsInBounds();
         }
     }
 }

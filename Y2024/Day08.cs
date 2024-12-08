@@ -42,9 +42,9 @@ public class Day08 : Day
 
     private static (IEnumerable<Point> Firsts, IEnumerable<Point> All) GetAntiNodes(Point antenna1, Point antenna2)
     {
-        var vector = antenna1.GetVector(antenna2);
-        var antiNodes1 = antenna1.GetPointsInDirection(vector.OppositeDirection());
-        var antiNodes2 = antenna2.GetPointsInDirection(vector);
+        var vector = antenna1 - antenna2;
+        var antiNodes1 = antenna1.GetPointsInDirection(vector);
+        var antiNodes2 = antenna2.GetPointsInDirection(-vector);
         return (Firsts: [.. antiNodes1.Take(1), .. antiNodes2.Take(1)], All: [..antiNodes1, ..antiNodes2]);
     }
 }
