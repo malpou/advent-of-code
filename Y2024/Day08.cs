@@ -7,13 +7,13 @@ public class Day08 : Day
 {
     public override (string part1, string part2) Solve(string[] input, string _)
     {
-        var (xMax, yMax) = (input[0].Length, input.Length);
+        var (cols, rows) = (input[0].Length, input.Length);
 
         var antennaGroups =
-            from x in Enumerable.Range(0, xMax)
-            from y in Enumerable.Range(0, yMax)
-            let point = new Point(x, y, xMax, yMax)
-            let character = input[x][y]
+            from col in Enumerable.Range(0, cols)
+            from row in Enumerable.Range(0, rows)
+            let point = new Point(col, row, cols, rows)
+            let character = input[row][col]
             where character != '.'
             group point by character
             into g
