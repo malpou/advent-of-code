@@ -29,22 +29,16 @@ public class Day08 : Day
                 var antennaPairs = antennaGroup.GetUniquePairs();
                 foreach (var (antenna1, antenna2) in antennaPairs)
                 {
-                    var nodes = GetAntiNodes(antenna1, antenna2);
-                    accumulator.FirstNodes.UnionWith(nodes.Firsts);
-                    accumulator.AllNodes.UnionWith(nodes.All);
+                    var vector = antenna1 - antenna2;
+                    var antiNodes1 = antenna1.GetPointsInDirection(vector);
+                    var antiNodes2 = antenna2.GetPointsInDirection(-vector);
+                    accumulator.FirstNodes.UnionWith([.. antiNodes1.Take(1), .. antiNodes2.Take(1)]);
+                    accumulator.AllNodes.UnionWith([..antiNodes1, ..antiNodes2]);
                 }
 
                 return accumulator;
             });
 
         return (result.FirstNodes.Count.ToString(), result.AllNodes.Count.ToString());
-    }
-
-    private static (IEnumerable<Point> Firsts, IEnumerable<Point> All) GetAntiNodes(Point antenna1, Point antenna2)
-    {
-        var vector = antenna1 - antenna2;
-        var antiNodes1 = antenna1.GetPointsInDirection(vector);
-        var antiNodes2 = antenna2.GetPointsInDirection(-vector);
-        return (Firsts: [.. antiNodes1.Take(1), .. antiNodes2.Take(1)], All: [..antiNodes1, ..antiNodes2]);
     }
 }
