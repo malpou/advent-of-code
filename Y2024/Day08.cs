@@ -5,60 +5,73 @@ namespace AdventOfCode.Y2024;
 
 public class Day08 : Day
 {
+    private int _xMax;
+    private int _yMax;
+
     public override (string part1, string part2) Solve(string[] input, string _)
     {
-        var (rows, cols) = (input.Length, input[0].Length);
+        (_xMax, _yMax) = (input[0].Length, input.Length);
 
-        var antennaGroups = Enumerable.Range(0, rows)
-            .SelectMany(_ => Enumerable.Range(0, cols),
-                (r, c) => (Char: input[r][c], Point: new Point(r, c)))
-            .Where(x => x.Char != '.')
-            .GroupBy(x => x.Char)
-            .Where(g => g.Count() > 1)
-            .Select(g => g.Select(x => x.Point).ToList());
+        var antennaGroups =
+            from x in Enumerable.Range(0, _xMax)
+            from y in Enumerable.Range(0, _yMax)
+            let point = new Point(x, y)
+            let character = input[x][y]
+            where character != '.'
+            group point by character
+            into g
+            where g.Count() > 1
+            select g;
 
-        var antiNodes = antennaGroups.Aggregate((First: new HashSet<Point>(), All: new HashSet<Point>()),
-            (acc, antennas) =>
+        var result = antennaGroups.Aggregate(
+            new { FirstNodes = new HashSet<Point>(), AllNodes = new HashSet<Point>() },
+            (accumulator, antennaGroup) =>
             {
-                acc.All.UnionWith(antennas);
+                accumulator.AllNodes.UnionWith(antennaGroup);
 
-                antennas.SelectMany((pos1, i) => antennas.Skip(i + 1)
-                        .Select(pos2 => (pos1, pos2)))
-                    .ToList()
-                    .ForEach(pair =>
-                    {
-                        var nodes = GetAntiNodes(pair.pos1, pair.pos2, rows, cols);
-                        acc.First.UnionWith(nodes.Firsts);
-                        acc.All.UnionWith(nodes.All);
-                    });
+                var antennaPairs = GetUniquePairs(antennaGroup);
+                foreach (var (antenna1, antenna2) in antennaPairs)
+                {
+                    var nodes = GetAntiNodes(antenna1, antenna2);
+                    accumulator.FirstNodes.UnionWith(nodes.Firsts);
+                    accumulator.AllNodes.UnionWith(nodes.All);
+                }
 
-                return acc;
+                return accumulator;
             });
 
-        return (antiNodes.First.Count.ToString(), antiNodes.All.Count.ToString());
+        return (result.FirstNodes.Count.ToString(), result.AllNodes.Count.ToString());
     }
 
-    private static (IEnumerable<Point> Firsts, IEnumerable<Point> All) GetAntiNodes
-        (Point antenna1, Point antenna2, int rows, int cols)
+    private (IEnumerable<Point> Firsts, IEnumerable<Point> All) GetAntiNodes
+        (Point antenna1, Point antenna2)
     {
         var vector = antenna1.GetVector(antenna2);
-        var antiNodes1 = GetPoints(antenna1, (-vector.Row, -vector.Col));
-        var antiNodes2 = GetPoints(antenna2, vector);
-
+        var antiNodes1 = GetPointsInDirection(antenna1, vector.OppositeDirection());
+        var antiNodes2 = GetPointsInDirection(antenna2, vector);
         return (Firsts: [.. antiNodes1.Take(1), .. antiNodes2.Take(1)], All: [..antiNodes1, ..antiNodes2]);
+    }
 
-        List<Point> GetPoints(Point antenna, (int Row, int Col) v)
+    private List<Point> GetPointsInDirection(Point p, Vector v)
+    {
+        var points = new List<Point>();
+        var point = p.AddVector(v);
+
+        while (point.IsInBounds(_xMax, _yMax))
         {
-            var points = new List<Point>();
-            var point = antenna.AddVector(v);
-
-            while (point.IsInBounds(rows, cols))
-            {
-                points.Add(point);
-                point = point.AddVector(v);
-            }
-
-            return points;
+            points.Add(point);
+            point = point.AddVector(v);
         }
+
+        return points;
+    }
+
+    private static IEnumerable<(Point, Point)> GetUniquePairs(IEnumerable<Point> points)
+    {
+        var pointsList = points.ToList();
+
+        return from i in Enumerable.Range(0, pointsList.Count)
+            from j in Enumerable.Range(i + 1, pointsList.Count - i - 1)
+            select (pointsList[i], pointsList[j]);
     }
 }

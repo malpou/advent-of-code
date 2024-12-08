@@ -1,16 +1,16 @@
 ﻿namespace AdventOfCode.Utils;
 
-public record Point(int Row, int Col)
+public record Point(int X, int Y)
 {
-    public override int GetHashCode() => HashCode.Combine(Row, Col);
+    public override int GetHashCode() => HashCode.Combine(X, Y);
 
-    public bool IsInBounds(int rows, int cols) => Row >= 0 && Row < rows && Col >= 0 && Col < cols;
+    public bool IsInBounds(int xMax, int yMax) => Y >= 0 && Y < yMax && X >= 0 && X < xMax;
 
-    public Point Add(Point other) => new(Row + other.Row, Col + other.Col);
+    public Point Add(Point other) => new(X + other.X, Y + other.Y);
 
-    public Point TurnRight() => new(Col, -Row);
+    public Point TurnRight() => new(-Y, X);
 
-    public (int Row, int Col) GetVector(Point other) => (other.Row - Row, other.Col - Col);
+    public Vector GetVector(Point other) => new(other.X - X, other.Y - Y);
 
-    public Point AddVector((int Row, int Col) vector) => new(Row + vector.Row, Col + vector.Col);
+    public Point AddVector(Vector vector) => new(X + vector.X, Y + vector.Y);
 }
