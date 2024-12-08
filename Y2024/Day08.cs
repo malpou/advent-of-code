@@ -27,8 +27,8 @@ public class Day08 : Day
                     .ToList()
                     .ForEach(pair =>
                     {
-                        acc.Item1.UnionWith(GetVectorPoints(pair.pos1, pair.pos2, rows, cols, false));
-                        acc.Item2.UnionWith(GetVectorPoints(pair.pos1, pair.pos2, rows, cols, true));
+                        acc.Item1.UnionWith(GetAntiNodes(pair.pos1, pair.pos2, rows, cols));
+                        acc.Item2.UnionWith(GetAntiNodes(pair.pos1, pair.pos2, rows, cols, true));
                     });
 
                 return acc;
@@ -37,8 +37,8 @@ public class Day08 : Day
         return (antiNodes.Count.ToString(), resonantAntiNodes.Count.ToString());
     }
 
-    private static IEnumerable<Point> GetVectorPoints(Point antenna1, Point antenna2, int rows, int cols,
-        bool allPoints)
+    private static IEnumerable<Point> GetAntiNodes(Point antenna1, Point antenna2, int rows, int cols,
+        bool resonantNodes = false)
     {
         var vector = antenna1.GetVector(antenna2);
         return GetPoints(antenna1, (-vector.Row, -vector.Col)).Concat(GetPoints(antenna2, vector));
@@ -49,7 +49,11 @@ public class Day08 : Day
             while (point.IsInBounds(rows, cols))
             {
                 yield return point;
-                if (!allPoints) yield break;
+                if (!resonantNodes)
+                {
+                    yield break;
+                }
+
                 point = point.AddVector(v);
             }
         }
