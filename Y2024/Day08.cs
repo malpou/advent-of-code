@@ -17,45 +17,48 @@ public class Day08 : Day
             .Where(g => g.Count() > 1)
             .Select(g => g.Select(x => x.Point).ToList());
 
-        var (antiNodes, resonantAntiNodes) = antennaGroups
-            .Aggregate((new HashSet<Point>(), new HashSet<Point>()), (acc, antennas) =>
+        var antiNodes = antennaGroups.Aggregate((First: new HashSet<Point>(), All: new HashSet<Point>()),
+            (acc, antennas) =>
             {
-                acc.Item2.UnionWith(antennas);
+                acc.All.UnionWith(antennas);
 
                 antennas.SelectMany((pos1, i) => antennas.Skip(i + 1)
                         .Select(pos2 => (pos1, pos2)))
                     .ToList()
                     .ForEach(pair =>
                     {
-                        acc.Item1.UnionWith(GetAntiNodes(pair.pos1, pair.pos2, rows, cols));
-                        acc.Item2.UnionWith(GetAntiNodes(pair.pos1, pair.pos2, rows, cols, true));
+                        var nodes = GetAntiNodes(pair.pos1, pair.pos2, rows, cols);
+                        acc.First.UnionWith(nodes.Firsts);
+                        acc.All.UnionWith(nodes.All);
                     });
 
                 return acc;
             });
 
-        return (antiNodes.Count.ToString(), resonantAntiNodes.Count.ToString());
+        return (antiNodes.First.Count.ToString(), antiNodes.All.Count.ToString());
     }
 
-    private static IEnumerable<Point> GetAntiNodes(Point antenna1, Point antenna2, int rows, int cols,
-        bool resonantNodes = false)
+    private static (IEnumerable<Point> Firsts, IEnumerable<Point> All) GetAntiNodes
+        (Point antenna1, Point antenna2, int rows, int cols)
     {
         var vector = antenna1.GetVector(antenna2);
-        return GetPoints(antenna1, (-vector.Row, -vector.Col)).Concat(GetPoints(antenna2, vector));
+        var antiNodes1 = GetPoints(antenna1, (-vector.Row, -vector.Col));
+        var antiNodes2 = GetPoints(antenna2, vector);
 
-        IEnumerable<Point> GetPoints(Point antenna, (int Row, int Col) v)
+        return (Firsts: [.. antiNodes1.Take(1), .. antiNodes2.Take(1)], All: [..antiNodes1, ..antiNodes2]);
+
+        List<Point> GetPoints(Point antenna, (int Row, int Col) v)
         {
+            var points = new List<Point>();
             var point = antenna.AddVector(v);
+
             while (point.IsInBounds(rows, cols))
             {
-                yield return point;
-                if (!resonantNodes)
-                {
-                    yield break;
-                }
-
+                points.Add(point);
                 point = point.AddVector(v);
             }
+
+            return points;
         }
     }
 }

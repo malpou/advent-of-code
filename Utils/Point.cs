@@ -11,6 +11,6 @@ public record Point(int Row, int Col)
     public Point TurnRight() => new(Col, -Row);
 
     public (int Row, int Col) GetVector(Point other) => (other.Row - Row, other.Col - Col);
-    
+
     public Point AddVector((int Row, int Col) vector) => new(Row + vector.Row, Col + vector.Col);
 }
