@@ -58,7 +58,9 @@ public class Day10 : Day
             var next = current + direction;
 
             if (!next.IsInBounds() || currentPath.Contains(next))
+            {
                 continue;
+            }
 
             var nextHeight = input[next.Y][next.X] - '0';
 
