@@ -10,7 +10,7 @@ public class Day10 : Day
         var height = input.Length;
         var width = input[0].Length;
 
-        var (ReachableNines, DistinctPaths) = Enumerable.Range(0, height)
+        var (reachableNines, distinctPaths) = Enumerable.Range(0, height)
             .SelectMany(y => Enumerable.Range(0, width)
                 .Where(x => input[y][x] == '0')
                 .Select(x => new Point(x, y, width, height)))
@@ -30,7 +30,7 @@ public class Day10 : Day
                 )
             );
 
-        return (ReachableNines.ToString(), DistinctPaths.ToString());
+        return (reachableNines.ToString(), distinctPaths.ToString());
     }
 
     private static void ExploreTrails(
